@@ -1,10 +1,8 @@
 ---
 name: PR Configuration & Security Checks
-
-"on":
+on:
   pull_request:
-    branches: ["dev"]
-
+    branches: [dev]
 jobs:
   security-and-lint:
     runs-on: ubuntu-latest
@@ -13,14 +11,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
       - name: Run Gitleaks Secret Scanner
         uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Validate YAML Configuration Syntax
         uses: ibiqlik/action-yamllint@v3
         with:
           file_or_dir: .
-          
