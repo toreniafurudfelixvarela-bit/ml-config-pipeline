@@ -1,8 +1,9 @@
+---
 name: PR Configuration & Security Checks
 
 on:
   pull_request:
-    branches: [ "dev" ]
+    branches: ["dev"]
 
 jobs:
   security-and-lint:
@@ -22,3 +23,4 @@ jobs:
         uses: ibiqlik/action-yamllint@v3
         with:
           file_or_dir: .
+          
