@@ -1,7 +1,7 @@
 ---
 name: PR Configuration & Security Checks
 
-on:
+"on":
   pull_request:
     branches: ["dev"]
 
