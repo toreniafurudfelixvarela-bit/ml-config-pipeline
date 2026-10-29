@@ -1,0 +1,2 @@
+model_name: my_model
+batch_size: 32
