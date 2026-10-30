@@ -1,4 +1,4 @@
 ---
 model_name: my_model
-batch_size: 32
-learning_rate: 0.001
+batch_size: 33
+learning_rate: 0.002
