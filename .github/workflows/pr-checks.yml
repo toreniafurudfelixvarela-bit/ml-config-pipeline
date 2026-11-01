@@ -1,8 +1,10 @@
 ---
 name: PR Configuration & Security Checks
-on:
+
+"on":
   pull_request:
-    branches: [dev]
+    branches: ["dev"]
+
 jobs:
   security-and-lint:
     runs-on: ubuntu-latest
@@ -11,11 +13,39 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - name: Run Gitleaks Secret Scanner
         uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Validate YAML Configuration Syntax
+
+      - name: Validate YAML Syntax Formatting
         uses: ibiqlik/action-yamllint@v3
         with:
-          file_or_dir: .
+          file_or_dir: config/model_params.yaml
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Validate YAML Schema & Data Types
+        run: |
+          pip install jsonschema pyyaml
+          python -c '
+          import yaml, json, sys
+          from jsonschema import validate, ValidationError
+
+          with open("config/schema.json") as f:
+              schema = json.load(f)
+
+          with open("config/model_params.yaml") as f:
+              data = yaml.safe_load(f)
+
+          try:
+              validate(instance=data, schema=schema)
+              print("Schema validation successful: Data types are valid!")
+          except ValidationError as e:
+              print(f"Schema Validation Error: {e.message}")
+              sys.exit(1)
+          '
